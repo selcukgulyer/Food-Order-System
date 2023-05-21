@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CreateOrderRequest {
     private int id;
-    private OrderStatus status = OrderStatus.YOK;
+    private OrderStatus status = OrderStatus.INITIAL;
     private User user;
     private Product product;
 }

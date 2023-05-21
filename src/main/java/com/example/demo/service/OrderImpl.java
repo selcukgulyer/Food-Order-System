@@ -43,6 +43,7 @@ public class OrderImpl implements OrderService {
                 product);
 
         orderRepository.save(order);
+
         CreatedOrderEvent event = CreatedOrderEvent.builder().
                 orderId(order.getId())
                 .productId(product.getId())
@@ -55,12 +56,12 @@ public class OrderImpl implements OrderService {
 
     @Override
     public OrderResponse updateOrder(int id, UpdateOrderRequest request) {
-        Optional<Order> orderOptional = orderRepository.findById(id);
+        Order byIdOrder = findByIdOrder(id);
         Order order = new Order(
-                orderOptional.get().getId(),
+                byIdOrder.getId(),
                 request.getStatus(),
-                orderOptional.get().getUser(),
-                orderOptional.get().getProduct()
+                byIdOrder.getUser(),
+                byIdOrder.getProduct()
 
         );
         orderRepository.save(order);

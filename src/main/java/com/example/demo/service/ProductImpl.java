@@ -30,9 +30,6 @@ public class ProductImpl implements ProductService {
                 request.getOrder()
 
         );
-        System.out.println(product.getProductName());
-        System.out.println(product.getStock());
-        System.out.println(product.getProductStatus());
         productRepository.save(product);
         ProductResponse productResponse = objectMapper.convertValue(product, ProductResponse.class);
         return productResponse;
@@ -64,9 +61,9 @@ public class ProductImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse deleteProduct(int id) {
-        Product byProductId = getByProductId(id);
+    public void deleteProduct(int id) {
+        getByProductId(id);
         productRepository.deleteById(id);
-        return ProductResponse.from(byProductId);
     }
+
 }

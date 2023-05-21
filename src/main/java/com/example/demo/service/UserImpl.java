@@ -34,9 +34,6 @@ public class UserImpl implements UserService {
 
     @Override
     public UserCreateResponse createUser(CreateUserRequest request) {
-
-        //User user = CreateRequest.deneme(request);
-
         User user = new User(request.getId(),
                 request.getName(),
                 request.getLastName(),
@@ -46,52 +43,25 @@ public class UserImpl implements UserService {
                 request.getOrder()
 
         );
-
-
         userRepository.save(user);
-
         UserCreateResponse userCreateResponse = UserCreateResponse.from(user);
-
         //rabbitTemplate.convertAndSend(exchange.getName(),routingKey,userDto);
         rabbitTemplate.convertAndSend(orderCreatedQueueName, userCreateResponse);
         return userCreateResponse;
     }
 
     @Override
-    public UserResponse deleteUser(int id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            System.out.println();
-            User response = new User(
-                    user.get().getId(),
-                    user.get().getName(),
-                    user.get().getLastName(),
-                    user.get().getBirth(),
-                    user.get().getAge(),
-                    user.get().getCards(),
-                    user.get().getOrder()
-            );
-
-            //  rabbitTemplate.convertAndSend(exchange.getName(), routingKey, response);
-            userRepository.deleteById(id);
-            return UserResponse.from(response);
-
-        } else {
-            throw new RuntimeException("Böyle bir kullanıcı bulunmamaktadır");
-
-        }
-
-
+    public void deleteUser(int id) {
+        getByUser(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     public UserResponse updateUser(int id, UpdateUserRequest req) {
         User byUser = getByUser(id);
-        User user = new User(id, req.getName(), req.getLastName(), req.getBirth(), req.getAge(), req.getCardDetails(), req.getOrder());
+        User user = new User(id, req.getName(), req.getLastName(), req.getBirth(), req.getAge(), byUser.getCards(), byUser.getOrder());
         userRepository.save(user);
         return UserResponse.from(user);
-
-
     }
 
     @Override
@@ -108,16 +78,13 @@ public class UserImpl implements UserService {
         if (userResponse.isPresent()) {
             return userResponse.get();
         }
-
         throw new AsgDataNotFoundException(ExceptionType.USER_DATA_NOT_FOUND, "Veritabanında böyle bir kayıt bulunamadı");
-
     }
 
 
     public UserResponse getByIdUser(int id) {
         Optional<User> response = userRepository.findById(id);
         if (response.isPresent()) {
-
             User user = new User(id,
                     response.get().getName(),
                     response.get().getLastName(),
@@ -130,7 +97,7 @@ public class UserImpl implements UserService {
             return UserResponse.from(user);
 
         } else {
-            throw new RuntimeException("Hataaaaa");
+            throw new AsgDataNotFoundException(ExceptionType.USER_DATA_NOT_FOUND);
         }
 
     }

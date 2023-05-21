@@ -5,6 +5,8 @@ import com.example.demo.controller.request.UpdateProductRequest;
 import com.example.demo.controller.response.ProductResponse;
 import com.example.demo.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,19 +16,19 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/add")
-    public ProductResponse createProduct(@RequestBody CreateProductRequest request) {
-        return productService.createProduct(request);
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody CreateProductRequest request) {
+        return new ResponseEntity<>(productService.createProduct(request), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ProductResponse updateProduct(@PathVariable int id,@RequestBody UpdateProductRequest request){
-        return productService.updateProduct(id,request);
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable int id, @RequestBody UpdateProductRequest request) {
+        return new ResponseEntity<>(productService.updateProduct(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ProductResponse deleteProduct(int id){
-        return productService.deleteProduct(id);
+    public ResponseEntity<Void> deleteProduct(int id) {
+        productService.deleteProduct(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Todo ürün silme güncelleme işlemi
 }

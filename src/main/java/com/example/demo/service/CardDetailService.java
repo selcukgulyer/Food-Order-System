@@ -7,7 +7,7 @@ import com.example.demo.controller.response.CardResponse;
 public interface CardDetailService {
     CardResponse createCardDetail(CreateCardRequest request);
 
-    CardResponse deleteCardDetail(int id);
+    void deleteCardDetail(int id);
 
     CardResponse updateCardDetail(int id, UpdateCardRequest request);
 }
