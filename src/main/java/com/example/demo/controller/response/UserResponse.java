@@ -26,12 +26,6 @@ public class UserResponse {
     private List<CardResponse> cards;
 
 
-
-
-
-
-
-
     /* public List<UserDto> convert(List<User> users){
                 return users.stream()
                         .map(user -> UserDto.from(user))
@@ -46,8 +40,6 @@ public class UserResponse {
                 user.getBirth(),
                 user.getAge(),
                 CardResponse.convert(user.getCards())
-
-
         );
     }
 

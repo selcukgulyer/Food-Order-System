@@ -21,7 +21,7 @@ public class Order {
 
     //Todo ; Default değer atanacak
     @Enumerated(EnumType.STRING)
-    private OrderStatus status = OrderStatus.YOK;
+    private OrderStatus status = OrderStatus.INITIAL;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

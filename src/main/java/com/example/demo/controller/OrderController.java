@@ -20,14 +20,14 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/add")
-    public OrderResponse add(@RequestBody CreateOrderRequest request) {
+    public ResponseEntity<OrderResponse> add(@RequestBody CreateOrderRequest request) {
 
-        return orderService.add(request);
+        return new ResponseEntity<>(orderService.add(request),HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public OrderResponse updateOrder(@PathVariable int id, @RequestBody UpdateOrderRequest request) {
-        return orderService.updateOrder(id, request);
+    @PatchMapping("/{id}")
+    public ResponseEntity<OrderResponse> updateOrder(@PathVariable int id, @RequestBody UpdateOrderRequest request) {
+        return new ResponseEntity<>(orderService.updateOrder(id, request),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -37,8 +37,9 @@ public class OrderController {
     }
 
     @GetMapping("/getAll")
-    public List<OrderResponse> getAllOrder() {
-        return orderService.getAll();
+    public ResponseEntity<List<OrderResponse>> getAllOrder() {
+
+        return new ResponseEntity<>(orderService.getAll(),HttpStatus.OK);
     }
 
 }

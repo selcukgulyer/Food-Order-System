@@ -22,10 +22,7 @@ public class CardDetailImpl implements CardDetailService {
 
     @Override
     public CardResponse createCardDetail(CreateCardRequest request) {
-        //Optional<User> response = userRepository.findById(request.getUser().getId());
-        // System.out.println(response.get());
         userService.getByUser(request.getUser().getId());
-
         CardDetails card = new CardDetails(
                 request.getId(),
                 request.getIban(),
@@ -36,13 +33,12 @@ public class CardDetailImpl implements CardDetailService {
         );
         cardDetailRepository.save(card);
         return CardResponse.from(card);
-
     }
 
     @Override
-    public CardResponse deleteCardDetail(int id) {
-        CardDetails cardDetails = getByIdCard(id);
-        return CardResponse.from(cardDetails);
+    public void deleteCardDetail(int id) {
+        getByIdCard(id);
+        cardDetailRepository.deleteById(id);
     }
 
     @Override

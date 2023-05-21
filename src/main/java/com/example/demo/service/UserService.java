@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserService {
     UserCreateResponse createUser(CreateUserRequest request);
 
-    UserResponse deleteUser(int id);
+    void deleteUser(int id);
 
     UserResponse updateUser(int id, UpdateUserRequest req);
 

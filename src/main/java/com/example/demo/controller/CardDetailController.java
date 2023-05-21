@@ -5,6 +5,8 @@ import com.example.demo.controller.request.UpdateCardRequest;
 import com.example.demo.controller.response.CardResponse;
 import com.example.demo.service.CardDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/card")
@@ -15,18 +17,19 @@ public class CardDetailController {
     private final CardDetailService cardDetailService;
 
     @PostMapping("/add")
-    public CardResponse createCardDetail(@RequestBody CreateCardRequest request) {
-        return cardDetailService.createCardDetail(request);
+    public ResponseEntity<CardResponse> createCardDetail(@RequestBody CreateCardRequest request) {
+        return new ResponseEntity<>(cardDetailService.createCardDetail(request),HttpStatus.CREATED);
 
     }
     @DeleteMapping("/{id}")
-    public CardResponse deleteCardDetail(@PathVariable int id){
-        return cardDetailService.deleteCardDetail(id);
+    public ResponseEntity<Void> deleteCardDetail(@PathVariable int id){
+        cardDetailService.deleteCardDetail(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{id}")
-    public CardResponse updateCardDetail(@PathVariable int id,@RequestBody UpdateCardRequest request){
-        return cardDetailService.updateCardDetail(id,request);
+    @PatchMapping("/{id}")
+    public ResponseEntity<CardResponse> updateCardDetail(@PathVariable int id,@RequestBody UpdateCardRequest request){
+        return new ResponseEntity<>(cardDetailService.updateCardDetail(id,request),HttpStatus.OK) ;
     }
 
     // Todo : istege göre card bilgisi getirme yapılabilir

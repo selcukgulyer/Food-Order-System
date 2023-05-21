@@ -4,14 +4,12 @@ import com.example.demo.entities.Order;
 import com.example.demo.entities.OrderStatus;
 import com.example.demo.entities.Product;
 import com.example.demo.event.CreatedOrderEvent;
-import com.example.demo.exception.AsgBusinessException;
-import com.example.demo.exception.AsgDataNotFoundException;
-import com.example.demo.exception.ExceptionType;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.service.OrderService;
 import com.example.demo.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductBusinessImpl implements ProductBusiness {
 
     private final ProductService productService;
@@ -37,18 +36,33 @@ public class ProductBusinessImpl implements ProductBusiness {
     public void controlStock(CreatedOrderEvent event) {
 
         Optional<Product> productOptional = productRepository.findById(event.getProductId());
+        Order orderOptional = orderService.findByIdOrder(event.getOrderId());
         if (productOptional.isPresent()) {
             if (productOptional.get().getStock() > 0) {
                 rabbitTemplate.convertAndSend(orderValidate, event);
             } else {
                 // Todo : orderStatus rejecteda çekilecek
                 // Todo : öncesinde orderin statusu rejecteda çekildiğine dair log atılacak
-                throw new AsgBusinessException(ExceptionType.PRODUCT_SOLD_OUT);
+                log.info("orderstatus is rejected");
+                Order order = new Order(
+                        orderOptional.getId(),
+                        OrderStatus.REJECTED,
+                        orderOptional.getUser(),
+                        orderOptional.getProduct()
+                );
+                orderRepository.save(order);
             }
 
         } else {
             // todo order rejecteda çekilecek log atılacak
-            throw new AsgDataNotFoundException(ExceptionType.PRODUCT_DATA_NOT_FOUND);
+            log.info("orderstatus is rejected");
+            Order order = new Order(
+                    orderOptional.getId(),
+                    OrderStatus.REJECTED,
+                    orderOptional.getUser(),
+                    orderOptional.getProduct()
+            );
+            orderRepository.save(order);
         }
 
     }
@@ -71,10 +85,9 @@ public class ProductBusinessImpl implements ProductBusiness {
         );
         productRepository.save(product);
         Order orderOptional = orderService.findByIdOrder(event.getOrderId());
-        OrderStatus neworderStatus = OrderStatus.VAR;
         Order order = new Order(
                 orderOptional.getId(),
-                neworderStatus,
+                OrderStatus.APPROVED,
                 orderOptional.getUser(),
                 orderOptional.getProduct()
         );

@@ -10,21 +10,19 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-
-// Todo : "unitPrice" eklenecek
 public class ProductResponse {
 
     private String productName;
-
     private int stock;
-
     private ProductStatus productStatus;
+    private double unitPrice;
 
     public static ProductResponse from(Product product) {
         return new ProductResponse(
                 product.getProductName(),
                 product.getStock(),
-                ProductStatus.VAR
+                ProductStatus.VAR,
+                product.getUnitPrice()
         );
     }
 }
