@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 public class OrderResponse {
     private int id;
     private OrderStatus order;
+    private int piece;
+    private double total;
     private UserResponse userResponse;
     private ProductResponse productResponse;
 
@@ -22,6 +24,8 @@ public class OrderResponse {
         return new OrderResponse(
                 order.getId(),
                 order.getStatus(),
+                order.getPiece(),
+                order.getTotal(),
                 UserResponse.from(order.getUser()),
                 ProductResponse.from(order.getProduct())
         );

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -20,14 +21,13 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/add")
-    public ResponseEntity<OrderResponse> add(@RequestBody CreateOrderRequest request) {
-
-        return new ResponseEntity<>(orderService.add(request),HttpStatus.CREATED);
+    public ResponseEntity<OrderResponse> add(@RequestBody @Valid CreateOrderRequest request) {
+        return new ResponseEntity<>(orderService.add(request), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<OrderResponse> updateOrder(@PathVariable int id, @RequestBody UpdateOrderRequest request) {
-        return new ResponseEntity<>(orderService.updateOrder(id, request),HttpStatus.OK);
+        return new ResponseEntity<>(orderService.updateOrder(id, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -38,8 +38,7 @@ public class OrderController {
 
     @GetMapping("/getAll")
     public ResponseEntity<List<OrderResponse>> getAllOrder() {
-
-        return new ResponseEntity<>(orderService.getAll(),HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getAll(), HttpStatus.OK);
     }
 
 }

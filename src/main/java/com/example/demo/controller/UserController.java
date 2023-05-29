@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/user")
@@ -19,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/add")
-    public ResponseEntity<UserCreateResponse> createUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserCreateResponse> createUser(@RequestBody @Valid CreateUserRequest request) {
         return new ResponseEntity<>(userService.createUser(request), HttpStatus.CREATED);
 
     }

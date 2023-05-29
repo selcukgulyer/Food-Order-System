@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -14,10 +17,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateProductRequest {
-    private int id;
+
+    @NotBlank(message = "Product name field cannot be empty")
     private String productName;
+    @NotNull(message = "stock field cannot be empty")
+    @Min(0)
     private int stock;
-    private ProductStatus productStatus;
+    private ProductStatus productStatus = ProductStatus.VAR;
+    @NotNull(message = "Unit price field cannot be empty")
     private Double unitPrice;
     private List<Order> order;
 }

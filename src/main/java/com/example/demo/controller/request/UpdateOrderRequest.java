@@ -12,4 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UpdateOrderRequest {
     private OrderStatus status;
+    private int piece;
+    private double total;
 }

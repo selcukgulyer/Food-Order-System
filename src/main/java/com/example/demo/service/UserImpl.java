@@ -34,7 +34,7 @@ public class UserImpl implements UserService {
 
     @Override
     public UserCreateResponse createUser(CreateUserRequest request) {
-        User user = new User(request.getId(),
+        User user = new User(
                 request.getName(),
                 request.getLastName(),
                 request.getBirth(),

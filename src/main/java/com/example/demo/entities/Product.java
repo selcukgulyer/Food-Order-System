@@ -20,7 +20,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     @Column(name = "product_name")
     private String productName;
     @Column(name = "stock")
@@ -45,5 +44,14 @@ public class Product {
                 ", order=" + order +
                 '}';
     }
+
+    public Product(String productName, int stock, ProductStatus productStatus, double unitPrice, List<Order> order) {
+        this.productName = productName;
+        this.stock = stock;
+        this.productStatus = productStatus;
+        this.unitPrice = unitPrice;
+        this.order = order;
+    }
+
 
 }
