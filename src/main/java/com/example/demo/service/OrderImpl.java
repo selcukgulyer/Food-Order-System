@@ -37,8 +37,9 @@ public class OrderImpl implements OrderService {
         Product product = productService.getByProductId(request.getProduct().getId());
 
         Order order = new Order(
-                request.getId(),
                 request.getStatus(),
+                request.getPiece(),
+                0,
                 user,
                 product);
 
@@ -60,6 +61,8 @@ public class OrderImpl implements OrderService {
         Order order = new Order(
                 byIdOrder.getId(),
                 request.getStatus(),
+                request.getPiece(),
+                request.getTotal(),
                 byIdOrder.getUser(),
                 byIdOrder.getProduct()
 

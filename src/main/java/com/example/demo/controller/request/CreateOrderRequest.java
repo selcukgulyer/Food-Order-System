@@ -8,13 +8,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateOrderRequest {
-    private int id;
+    
     private OrderStatus status = OrderStatus.INITIAL;
+    @NotNull(message = "piece field cannot be empty")
+    private int piece;
     private User user;
     private Product product;
 }

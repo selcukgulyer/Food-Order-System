@@ -2,6 +2,8 @@ package com.example.demo.event;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @ToString

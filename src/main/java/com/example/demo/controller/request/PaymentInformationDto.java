@@ -12,7 +12,6 @@ import lombok.Setter;
 public class PaymentInformationDto {
     private String cardNumber;
     private String cvc;
-
     private String lastUsageDate;
 
 }

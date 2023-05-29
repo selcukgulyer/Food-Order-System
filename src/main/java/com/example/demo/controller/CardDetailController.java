@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequestMapping("/card")
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +19,7 @@ public class CardDetailController {
     private final CardDetailService cardDetailService;
 
     @PostMapping("/add")
-    public ResponseEntity<CardResponse> createCardDetail(@RequestBody CreateCardRequest request) {
+    public ResponseEntity<CardResponse> createCardDetail(@RequestBody @Valid CreateCardRequest request) {
         return new ResponseEntity<>(cardDetailService.createCardDetail(request),HttpStatus.CREATED);
 
     }

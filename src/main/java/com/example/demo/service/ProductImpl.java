@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,7 +23,6 @@ public class ProductImpl implements ProductService {
     @Override
     public ProductResponse createProduct(CreateProductRequest request) {
         Product product = new Product(
-                request.getId(),
                 request.getProductName(),
                 request.getStock(),
                 request.getProductStatus(),
@@ -64,6 +64,22 @@ public class ProductImpl implements ProductService {
     public void deleteProduct(int id) {
         getByProductId(id);
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public ProductResponse getProductId(int id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()) {
+            return ProductResponse.from(productOptional.get());
+        } else {
+            throw new AsgDataNotFoundException(ExceptionType.PRODUCT_DATA_NOT_FOUND);
+        }
+    }
+
+    @Override
+    public List<ProductResponse> getAll() {
+        List<Product> products = productRepository.findAll();
+        return ProductResponse.convertToList(products);
     }
 
 }

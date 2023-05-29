@@ -24,7 +24,6 @@ public class CardDetailImpl implements CardDetailService {
     public CardResponse createCardDetail(CreateCardRequest request) {
         userService.getByUser(request.getUser().getId());
         CardDetails card = new CardDetails(
-                request.getId(),
                 request.getIban(),
                 request.getCardNumber(),
                 request.getCvc(),

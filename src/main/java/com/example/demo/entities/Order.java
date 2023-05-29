@@ -18,10 +18,14 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
-    //Todo ; Default değer atanacak
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.INITIAL;
+
+    @Column(name = "piece")
+    private int piece;
+
+    @Column(name = "total")
+    private double total;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -30,4 +34,12 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+    public Order(OrderStatus status, int piece, double total, User user, Product product) {
+        this.status = status;
+        this.piece = piece;
+        this.total = total;
+        this.user = user;
+        this.product = product;
+    }
 }

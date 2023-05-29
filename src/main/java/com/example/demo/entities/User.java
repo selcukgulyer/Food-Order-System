@@ -24,6 +24,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(name = "name")
     private String name;
     @Column(name = "last_name")
@@ -42,6 +43,15 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> order = new ArrayList<>();
+
+    public User(String name, String lastName, LocalDate birth, int age, List<CardDetails> cards, List<Order> order) {
+        this.name = name;
+        this.lastName = lastName;
+        this.birth = birth;
+        this.age = age;
+        this.cards = cards;
+        this.order = order;
+    }
 
 
 }

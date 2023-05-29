@@ -12,9 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,39 +25,31 @@ public class ProductBusinessImpl implements ProductBusiness {
     private final AmqpTemplate rabbitTemplate;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Value("${sample.rabbitmq.routingKey}")
     String routingKey;
     @Value("${rabbitmq.queue.order_validate}")
     String orderValidate;
 
+
     @Override
     public void controlStock(CreatedOrderEvent event) {
 
-        Optional<Product> productOptional = productRepository.findById(event.getProductId());
+        Product productOptional = productService.getByProductId(event.getProductId());
         Order orderOptional = orderService.findByIdOrder(event.getOrderId());
-        if (productOptional.isPresent()) {
-            if (productOptional.get().getStock() > 0) {
-                rabbitTemplate.convertAndSend(orderValidate, event);
-            } else {
-                // Todo : orderStatus rejecteda çekilecek
-                // Todo : öncesinde orderin statusu rejecteda çekildiğine dair log atılacak
-                log.info("orderstatus is rejected");
-                Order order = new Order(
-                        orderOptional.getId(),
-                        OrderStatus.REJECTED,
-                        orderOptional.getUser(),
-                        orderOptional.getProduct()
-                );
-                orderRepository.save(order);
-            }
-
+        int count = productOptional.getStock() - orderOptional.getPiece();
+        if (productOptional.getStock() > orderOptional.getPiece() && count > 0) {
+            //  rabbitTemplate.convertAndSend(orderValidate, event);
+            kafkaTemplate.send("default", event);
         } else {
-            // todo order rejecteda çekilecek log atılacak
+            double total = productOptional.getUnitPrice() * orderOptional.getPiece();
             log.info("orderstatus is rejected");
             Order order = new Order(
                     orderOptional.getId(),
                     OrderStatus.REJECTED,
+                    orderOptional.getPiece(),
+                    total,
                     orderOptional.getUser(),
                     orderOptional.getProduct()
             );
@@ -67,14 +58,12 @@ public class ProductBusinessImpl implements ProductBusiness {
 
     }
 
-    // Todo : orderserviceden order id var mı kontrol et ?
-    // Todo : status adını inital,Rejected,Approved
     @Override
     public void updateOrder(CreatedOrderEvent event) {
-        System.out.println("Kuyruktan gelen mesaj  :" + event);
         Product productOptional = productService.getByProductId(event.getProductId());
+        Order orderOptional = orderService.findByIdOrder(event.getOrderId());
 
-        int stock = productOptional.getStock() - 1;
+        int stock = productOptional.getStock() - orderOptional.getPiece();
         Product product = new Product(
                 productOptional.getId(),
                 productOptional.getProductName(),
@@ -84,10 +73,12 @@ public class ProductBusinessImpl implements ProductBusiness {
                 productOptional.getOrder()
         );
         productRepository.save(product);
-        Order orderOptional = orderService.findByIdOrder(event.getOrderId());
+        double total = productOptional.getUnitPrice() * orderOptional.getPiece();
         Order order = new Order(
                 orderOptional.getId(),
                 OrderStatus.APPROVED,
+                orderOptional.getPiece(),
+                total,
                 orderOptional.getUser(),
                 orderOptional.getProduct()
         );

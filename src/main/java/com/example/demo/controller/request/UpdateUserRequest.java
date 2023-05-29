@@ -26,6 +26,4 @@ public class UpdateUserRequest {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate birth;
     private int age;
-    private List<CardDetails> cardDetails;
-    private List<Order> order;
 }

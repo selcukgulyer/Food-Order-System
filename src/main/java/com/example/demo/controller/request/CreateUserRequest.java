@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,12 +17,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateUserRequest {
-    private int id;
+    @NotBlank(message = "name field cannot be empty")
     private String name;
+    @NotBlank(message = "lastName field cannot be empty")
     private String lastName;
+    @NotNull(message = "age field cannot be empty")
     private int age;
-    // @JsonSerialize(using = LocalDateSerializer.class)
-    //@JsonDeserialize(using = LocalDateDeserializer.class)
+    @NotNull(message = "birth field cannot be empty")
     private LocalDate birth;
     private List<CardDetails> cards;
     private List<Order> order;
