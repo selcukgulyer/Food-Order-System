@@ -4,6 +4,7 @@ import com.example.demo.controller.request.CreateUserRequest;
 import com.example.demo.controller.request.UpdateUserRequest;
 import com.example.demo.controller.response.UserCreateResponse;
 import com.example.demo.controller.response.UserResponse;
+import com.example.demo.controller.response.UserUpdateResponse;
 import com.example.demo.entities.User;
 import com.example.demo.exception.AsgDataNotFoundException;
 import com.example.demo.exception.ExceptionType;
@@ -24,9 +25,9 @@ import java.util.stream.Collectors;
 public class UserImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final DirectExchange exchange;
+//    private final DirectExchange exchange;
     private final AmqpTemplate rabbitTemplate;
-    private final ObjectMapper objectMapper;
+//    private final ObjectMapper objectMapper;
     @Value("${sample.rabbitmq.routingKey}")
     String routingKey;
     @Value("${rabbitmq.queue.order_created}")
@@ -57,11 +58,11 @@ public class UserImpl implements UserService {
     }
 
     @Override
-    public UserResponse updateUser(int id, UpdateUserRequest req) {
+    public UserUpdateResponse updateUser(int id, UpdateUserRequest req) {
         User byUser = getByUser(id);
         User user = new User(id, req.getName(), req.getLastName(), req.getBirth(), req.getAge(), byUser.getCards(), byUser.getOrder());
         userRepository.save(user);
-        return UserResponse.from(user);
+        return UserUpdateResponse.from(user);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.example.demo.controller.request.CreateUserRequest;
 import com.example.demo.controller.request.UpdateUserRequest;
 import com.example.demo.controller.response.UserCreateResponse;
 import com.example.demo.controller.response.UserResponse;
+import com.example.demo.controller.response.UserUpdateResponse;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable int id, @RequestBody UpdateUserRequest req) {
+    public ResponseEntity<UserUpdateResponse> updateUser(@PathVariable int id, @RequestBody UpdateUserRequest req) {
         return new ResponseEntity<>(userService.updateUser(id, req),HttpStatus.OK);
     }
 

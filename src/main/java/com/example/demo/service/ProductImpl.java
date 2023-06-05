@@ -31,8 +31,7 @@ public class ProductImpl implements ProductService {
 
         );
         productRepository.save(product);
-        ProductResponse productResponse = objectMapper.convertValue(product, ProductResponse.class);
-        return productResponse;
+        return ProductResponse.from(product);
     }
 
     @Override

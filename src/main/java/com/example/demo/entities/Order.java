@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "order_table")
 @ToString
+@EqualsAndHashCode
 public class Order {
 
     @Id

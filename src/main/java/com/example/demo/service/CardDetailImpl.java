@@ -18,7 +18,7 @@ import java.util.Optional;
 public class CardDetailImpl implements CardDetailService {
     private final CardDetailRepository cardDetailRepository;
     private final UserService userService;
-    private final ObjectMapper objectMapper;
+
 
     @Override
     public CardResponse createCardDetail(CreateCardRequest request) {
