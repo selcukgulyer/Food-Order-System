@@ -4,6 +4,7 @@ import com.example.demo.controller.request.CreateUserRequest;
 import com.example.demo.controller.request.UpdateUserRequest;
 import com.example.demo.controller.response.UserCreateResponse;
 import com.example.demo.controller.response.UserResponse;
+import com.example.demo.controller.response.UserUpdateResponse;
 import com.example.demo.entities.User;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface UserService {
 
     void deleteUser(int id);
 
-    UserResponse updateUser(int id, UpdateUserRequest req);
+    UserUpdateResponse updateUser(int id, UpdateUserRequest req);
 
     List<UserResponse> getAll();
 

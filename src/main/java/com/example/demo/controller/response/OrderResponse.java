@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class OrderResponse {
     private int id;
     private OrderStatus order;

@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "card_detail")
 @ToString
+@EqualsAndHashCode
 public class CardDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

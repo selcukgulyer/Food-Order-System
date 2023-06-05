@@ -2,7 +2,10 @@ package com.example.demo.controller.response;
 
 import com.example.demo.entities.CardDetails;
 import lombok.*;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @ToString
 @Builder
+@EqualsAndHashCode
 public class CardResponse {
     private String iban;
     private String cardNumber;
@@ -29,8 +33,11 @@ public class CardResponse {
     }
 
     public static List<CardResponse> convert(List<CardDetails> cards) {
+        if (CollectionUtils.isEmpty(cards))
+            return new ArrayList<>();
+
         return cards.stream()
-                .map(card -> CardResponse.from(card))
+                .map(CardResponse::from)
                 .collect(Collectors.toList());
     }
 

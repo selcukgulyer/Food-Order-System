@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class UserCreateResponse {
 
     private String name;
